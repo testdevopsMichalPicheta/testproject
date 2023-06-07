@@ -4,15 +4,15 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+    - name: tf_folder
+      value: $(System.DafaultWorkingDirectory)/cwiczenia\spterraform
+
 stages:
 - stage:
   jobs: 
-  - job: BuildPushImage
+  - job: testTF
     steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'Docker'
-        repository: 'michalpicheta / testproject'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: '$(Build.BuildId)'
+    - script: 
+        docker run --tty --volume @(tf_folder):/tf bridgecrew/checkov --directory /tf --compact
+      displayName: Run test
