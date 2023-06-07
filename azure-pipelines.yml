@@ -8,11 +8,7 @@ variables:
     - name: tf_folder
       value: $(System.DafaultWorkingDirectory)/cwiczenia\spterraform
 
-stages:
-- stage:
-  jobs: 
-  - job: testTF
-    steps:
-    - script: 
+steps:
+    - script: |
         docker run --tty --volume @(tf_folder):/tf bridgecrew/checkov --directory /tf --compact
       displayName: Run test
